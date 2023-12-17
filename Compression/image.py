@@ -1,15 +1,18 @@
-import sys
 from PIL import Image
+import os
 
-def compress_image(input_image_path, output_image_path, compression_method='DCT', quality=50):
+def evaluate_image(input_image_path, compression_method='DCT', quality=50):
+    extension = input_image_path.split('.')[-1]
+    script_directory = os.path.dirname(__file__)
+    output_path = os.path.join(script_directory, 'compressed.'+extension)
     try:
         img = Image.open(input_image_path)
 
         if compression_method == 'DCT':
-            img.save(output_image_path, quality=quality)
+            img.save(output_path, quality=quality)
 
         elif compression_method == 'Deflate':
-            img.save(output_image_path, compress_level=9)
+            img.save(output_path, compress_level=9)
 
         else:
             print("Unsupported compression method.")
@@ -17,29 +20,48 @@ def compress_image(input_image_path, output_image_path, compression_method='DCT'
     except FileNotFoundError:
         print("The input image file was not found.")
 
-def reconstruct_image(compressed_image_path, output_reconstructed_image_path):
+    reconstructed_path = os.path.join(script_directory, 'reconstructed.'+extension)
+
     try:
-        img = Image.open(compressed_image_path)
-        img.save(output_reconstructed_image_path)
+        img = Image.open(output_path)
+        img.save(reconstructed_path)
         print("Image reconstructed successfully!")
 
     except FileNotFoundError:
         print("The compressed image file was not found.")
-
-if __name__ == "__main__":
-    action = input("Enter 'compress' to compress or 'decompress' to decompress: ")
-
-    if action not in ['compress', 'decompress']:
-        print("Invalid action. Use 'compress' or 'decompress'.")
-        sys.exit(1)
-
-    input_image_path = input("Enter the path of the input image file: ")
-    output_file_path = input("Enter the path for the output file: ")
-
-    if action == 'compress':
-        compression_method = input("Enter compression method (DCT/Deflate): ")
-        quality_level = 50  
-        compress_image(input_image_path, output_file_path, compression_method, quality_level)
     
-    elif action == 'decompress':
-        reconstruct_image(input_image_path, output_file_path)
+    original_size = os.path.getsize(
+        os.path.join(input_image_path)
+    )
+    compressed_size = os.path.getsize(
+        os.path.join(output_path)
+    )
+
+    final_size = os.path.getsize(
+        os.path.join(reconstructed_path)
+    )
+    # Check if decompressed directories exist before calculating losses
+    loss_percentage =  (original_size - final_size)/ original_size
+    reconstructed_file_path=reconstructed_path
+    compressed_file_path=output_path
+    compression_ratio = original_size/compressed_size  if compressed_size > 0 else 0
+
+    return compression_ratio, loss_percentage, reconstructed_file_path, compressed_file_path
+
+
+def main(image_path):
+    algorithms = ['DCT', 'Deflate']
+    results = []
+
+    for algo in algorithms:
+        result = evaluate_image(image_path, algo)
+        result_dict = {
+            "algorithm" : algo,
+            "compressed_file_path" : result[3],
+            "reconstructed_file_path" : result[2],
+            "compression_ratio" : result[0],
+            "loss_percentage" : result[1],
+        }
+        results.append(result_dict)
+    
+    return results

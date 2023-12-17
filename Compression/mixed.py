@@ -58,19 +58,13 @@ def main(folder_path):
 
     for algo in algorithms:
         result = compress_and_decompress(folder_path, algo)
-        results.append(result)
+        result_dict = {
+            "algorithm" : algo,
+            "compressed_file_path" : result[3],
+            "reconstructed_file_path" : result[2],
+            "compression_ratio" : result[0],
+            "loss_percentage" : result[1],
+        }
+        results.append(result_dict)
 
     return results
-
-if __name__ == "__main__":
-    # Example usage
-    folder_path = input("Enter folder path: ")
-    compression_results = main(folder_path)
-
-    for i, result in enumerate(compression_results, 1):
-        print(f"\nAlgorithm {i}:")
-        print(f"Compressed File Path: {result[3]}")  # Using positional indexing
-        print(f"Reconstructed File Path: {result[2]}")  # Using positional indexing
-        print(f"Compression Ratio: {result[0]:.2f}")  # Using positional indexing
-        print(f"Loss Percentage: {result[1] * 100:.2f}%")  # Using positional indexing
-
