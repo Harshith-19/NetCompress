@@ -1,16 +1,18 @@
 import os
 import subprocess
 from pydub import AudioSegment
+import soundfile as sf
+from opuslib import Decoder
 
 def compress_and_decompress(file_path, algo):
     extension = file_path.split('.')[-1]
     script_directory = os.path.dirname(__file__)
-    reconstructed_file_path = os.path.join(script_directory, 'compressed_'+algo+'.'+extension)
+    reconstructed_file_path = os.path.join(script_directory, 'reconstructed_'+algo+'.'+extension)
 
     if algo == 'AAC':
-        audio = AudioSegment.from_file(file_path)
         compressed_file_path = os.path.join(script_directory, 'compressed_'+algo+'.aac')
-        audio.export(compressed_file_path, format='aac')
+        command = ['ffmpeg','-i', file_path, '-c:a', 'aac', '-strict', 'experimental', compressed_file_path]
+        subprocess.run(command, check=True)
         audio = AudioSegment.from_file(compressed_file_path, format='aac')
         audio.export(reconstructed_file_path, format=extension)
     
@@ -21,9 +23,13 @@ def compress_and_decompress(file_path, algo):
         audio = AudioSegment.from_file(compressed_file_path, format='flac')
         audio.export(reconstructed_file_path, format=extension)
     
-    elif algo == 'Opus':
-        compressed_file_path = os.path.join(script_directory, 'compressed_'+algo+'.opus')
-        subprocess.run(['ffmpeg', '-i', file_path, '-c:a', 'libopus', compressed_file_path])
+    elif algo == 'ALAC':
+        compressed_file_path = os.path.join(script_directory, 'compressed_'+algo+'.m4a')
+        ffmpeg_cmd = ["ffmpeg","-i", file_path, "-codec:a", "alac", compressed_file_path ]
+        subprocess.run(ffmpeg_cmd)
+        audio = AudioSegment.from_file(compressed_file_path, format='m4a')
+        audio.export(reconstructed_file_path, format=extension)      
+
     
     original_size = os.path.getsize(
         os.path.join(file_path)
@@ -45,12 +51,12 @@ def compress_and_decompress(file_path, algo):
 
 
 
-def main(image_path):
-    algorithms = ['AAC', 'FLAC']
+def main(audio_path):
+    algorithms = ['AAC', 'FLAC', 'ALAC']
     results = []
 
     for algo in algorithms:
-        result = compress_and_decompress(image_path, algo)
+        result = compress_and_decompress(audio_path, algo)
         result_dict = {
             "algorithm" : algo,
             "compressed_file_path" : result[3],
@@ -59,5 +65,11 @@ def main(image_path):
             "loss_percentage" : result[1],
         }
         results.append(result_dict)
-    
+    print(results)
     return results
+
+
+if __name__ == "__main__":
+    # Example usage
+    folder_path = input("Enter folder path: ")
+    compression_results = main(folder_path)
