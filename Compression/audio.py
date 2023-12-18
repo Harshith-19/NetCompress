@@ -1,8 +1,6 @@
 import os
 import subprocess
 from pydub import AudioSegment
-import soundfile as sf
-from opuslib import Decoder
 
 def compress_and_decompress(file_path, algo):
     extension = file_path.split('.')[-1]
@@ -65,11 +63,5 @@ def main(audio_path):
             "loss_percentage" : result[1],
         }
         results.append(result_dict)
-    print(results)
+
     return results
-
-
-if __name__ == "__main__":
-    # Example usage
-    folder_path = input("Enter folder path: ")
-    compression_results = main(folder_path)
