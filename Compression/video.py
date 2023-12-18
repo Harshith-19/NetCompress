@@ -48,7 +48,7 @@ def compress_and_decompress(file_path, algo):
 
 
 
-def main(video_path):
+def main_video(video_path):
     algorithms = ['H.264', 'H.265', 'VP9']
     results = []
 

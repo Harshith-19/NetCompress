@@ -116,7 +116,7 @@ def compress_and_decompress(file_path, algo):
     return compression_ratio, loss_percentage, reconstructed_file_path, compressed_file_path
 
 
-def main(real_time_path):
+def main_real(real_time_path):
     algorithms = ['Brotli', 'RLE']
     results = []
 

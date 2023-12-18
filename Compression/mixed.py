@@ -52,7 +52,7 @@ def compress_and_decompress(folder_path, algo):
 
     return compression_ratio, loss_percentage, reconstructed_file_path, compressed_file_path
 
-def main(folder_path):
+def main_mixed(folder_path):
     algorithms = ['lzma', 'deflate']
     results = []
 

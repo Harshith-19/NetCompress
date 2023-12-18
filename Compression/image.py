@@ -49,7 +49,7 @@ def evaluate_image(input_image_path, compression_method='DCT', quality=50):
     return compression_ratio, loss_percentage, reconstructed_file_path, compressed_file_path
 
 
-def main(image_path):
+def main_image(image_path):
     algorithms = ['DCT', 'Deflate']
     results = []
 

@@ -49,7 +49,7 @@ def compress_and_decompress(file_path, algo):
 
 
 
-def main(audio_path):
+def main_audio(audio_path):
     algorithms = ['AAC', 'FLAC', 'ALAC']
     results = []
 

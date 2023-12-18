@@ -184,7 +184,7 @@ def compress_and_decompress(file_path, algo):
     return compression_ratio, loss_percentage, reconstructed_file_path, compressed_file_path
 
 
-def main(data_path):
+def main_data(data_path):
     algorithms = ['LZ77', 'LZW']
     results = []
 
