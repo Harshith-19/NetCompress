@@ -62,11 +62,5 @@ def main(video_path):
             "loss_percentage" : result[1],
         }
         results.append(result_dict)
-        print(results)
+
     return results
-
-
-if __name__ == "__main__":
-    # Example usage
-    folder_path = input("Enter folder path: ")
-    compression_results = main(folder_path)
