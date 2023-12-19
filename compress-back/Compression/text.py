@@ -96,8 +96,12 @@ def evaluate_huffman(file_path, compressed_file_path, reconstructed_file_path):
     try:
         with open(file_path, 'r') as file:
             text = file.read()
+        print(text)
         compressed_text, huffman_tree = compress_huffman(text)
-        binary_data = int(compressed_text, 2).to_bytes((len(compressed_text) + 7) // 8, byteorder='big')
+        print(compressed_text)
+        integer_value = int(compressed_text, 2)
+        binary_data = integer_value.to_bytes((len(compressed_text) + 7) // 8, byteorder='big')
+        print(binary_data)
         with open(compressed_file_path, 'wb') as output_file:
             output_file.write(binary_data)
         print(f"Compression successful. Encoded file saved to {compressed_file_path}")
@@ -109,8 +113,15 @@ def evaluate_huffman(file_path, compressed_file_path, reconstructed_file_path):
     try:
         with open(compressed_file_path, 'rb') as file:
             encoded_text = file.read()
-        encoded_text = ''.join(format(byte, '08b') for byte in encoded_text)
-        original_text = decompress_huffman(encoded_text, huffman_tree)
+        print(encoded_text)
+        # chunks = [encoded_text[i:i+8] for i in range(0, len(encoded_text), 8)]
+        # text = ''.join(chr(int(chunk, 2)) for chunk in chunks)
+        # print(text)
+        integer_value = int.from_bytes(encoded_text, byteorder='big')
+        original_binary_string = bin(integer_value)[2:]
+        print(original_binary_string)
+        original_text = decompress_huffman(original_binary_string, huffman_tree)
+        print(original_text)
         with open(reconstructed_file_path, 'w') as output_file:
             output_file.write(original_text)
         print(f"Decompression successful. Decoded file saved to {reconstructed_file_path}")
@@ -195,3 +206,44 @@ def main_text(text_path):
 
     return results
 
+
+
+# def write_binary_string_to_file(binary_string, file_name):
+#     # Convert the binary string to an integer
+#     integer_value = int(binary_string, 2)
+    
+#     # Convert the integer to its binary representation as bytes
+#     binary_data = integer_value.to_bytes((len(binary_string) + 7) // 8, byteorder='big')
+    
+#     # Write the binary data to a file in raw binary format
+#     with open(file_name, 'wb') as file:
+#         file.write(binary_data)
+
+# def read_binary_string_from_file(file_name):
+#     # Read the binary data from the file
+#     with open(file_name, 'rb') as file:
+#         binary_data = file.read()
+    
+#     # Convert the binary data back to an integer
+#     integer_value = int.from_bytes(binary_data, byteorder='big')
+    
+#     # Convert the integer back to its binary string representation
+#     binary_string = bin(integer_value)[2:]  # [2:] to remove the '0b' prefix
+    
+#     return binary_string
+
+# # Your binary string
+# original_binary_string = "111100110001001111011001001001011011010110110110110100111010000010010011010111010110111010101101111111000000111010000000111010001110110011011001111100011"
+
+# # Specify the file name where you want to store the binary data
+# file_name = 'binary_data.bin'
+
+# # Write the binary string to a file
+# write_binary_string_to_file(original_binary_string, file_name)
+
+# # Read the binary string from the file
+# retrieved_binary_string = read_binary_string_from_file(file_name)
+
+# print("Original binary string:", original_binary_string)
+# print("Retrieved binary string from file:", retrieved_binary_string)
+# print(original_binary_string == retrieved_binary_string)
