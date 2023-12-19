@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .models import FileRequest
+from models import FileRequest
 from Compression.audio import main_audio
 from Compression.data import main_data
 from Compression.image import main_image
