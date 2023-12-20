@@ -23,10 +23,27 @@ app.add_middleware(
 async def options_upload():
     return {"message": "Allowed"}
 
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
+async def save_upload_file(upload_file: UploadFile) -> str:
+    upload_dir = "uploads"
+    if not os.path.exists(upload_dir):
+        os.makedirs(upload_dir)
+    file_location = os.path.join(upload_dir, upload_file.filename)
+    with open(file_location, "wb") as file_object:
+        shutil.copyfileobj(upload_file.file, file_object)
+    
+    return file_location
+
+
 @app.post("/upload/")
-def upload_file(file_request: FileRequest):
-    file_path = file_request.filePath
-    file_type = file_request.fileType
+async def upload_file(file: UploadFile = File(...), fileType: str = Form(...)):
+    file_path = await save_upload_file(file)
+
+    file_path = file_path
+    file_type = fileType
 
     if file_type == "Text":
         return main_text(file_path)
