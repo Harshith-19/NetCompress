@@ -139,23 +139,23 @@ const App = () => {
     return fileType || 'Others';
   };
 
-  const [formData, setFormData] = useState({
-    "filePath": '',
-    "fileType": '',
-  });
+  // const [formData, setFormData] = useState({
+  //   "filePath": '',
+  //   "fileType": '',
+  // });
   
-  useEffect(() => {
-    const fileExtension = filePath.split('.').pop();
-    const detectedFileType = getFileTypeFromExtension(fileExtension);
-    setFileType(detectedFileType);
-  }, [filePath]);
+  // useEffect(() => {
+  //   const fileExtension = filePath.split('.').pop();
+  //   const detectedFileType = getFileTypeFromExtension(fileExtension);
+  //   setFileType(detectedFileType);
+  // }, [filePath]);
   
-  useEffect(() => {
-    setFormData({
-      "file": file,
-      "fileType": fileType,
-    });
-  }, [file, fileType]);
+  // useEffect(() => {
+  //   setFormData({
+  //     "file": file,
+  //     "fileType": fileType,
+  //   });
+  // }, [file, fileType]);
   
   const handleFileUpload = () => {
     setLoading(true);
