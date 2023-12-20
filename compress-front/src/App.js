@@ -49,6 +49,7 @@ const App = () => {
   const [filePath, setFilePath] = useState('');
   const [savedData, setSavedData] = useState(0);
   const [lostData, setLostData] = useState(0);
+  const [hasError, setHasError] = useState(false);
   const [fileType, setFileType] = useState('');
   const [compressedFilePath, setCompressedFilePath] = useState('/mnt/c/Users/homep/Desktop/SIH/NetCompress/Compression/compressed_H.264.mp4');
   const [reconstructedFilePath, setReconstructedFilePath] = useState('/mnt/c/Users/homep/Desktop/SIH/NetCompress/res/res.264.mp4');
@@ -138,23 +139,23 @@ const App = () => {
     return fileType || 'Others';
   };
 
-  const [formData, setFormData] = useState({
-    "filePath": '',
-    "fileType": '',
-  });
+  // const [formData, setFormData] = useState({
+  //   "filePath": '',
+  //   "fileType": '',
+  // });
   
-  useEffect(() => {
-    const fileExtension = filePath.split('.').pop();
-    const detectedFileType = getFileTypeFromExtension(fileExtension);
-    setFileType(detectedFileType);
-  }, [filePath]);
+  // useEffect(() => {
+  //   const fileExtension = filePath.split('.').pop();
+  //   const detectedFileType = getFileTypeFromExtension(fileExtension);
+  //   setFileType(detectedFileType);
+  // }, [filePath]);
   
-  useEffect(() => {
-    setFormData({
-      "file": file,
-      "fileType": fileType,
-    });
-  }, [file, fileType]);
+  // useEffect(() => {
+  //   setFormData({
+  //     "file": file,
+  //     "fileType": fileType,
+  //   });
+  // }, [file, fileType]);
   
   const handleFileUpload = () => {
     setLoading(true);
@@ -168,7 +169,13 @@ const App = () => {
       method: 'POST',
       body: formData2,
     })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          setHasError(true)
+          window.location.reload();
+        }
+        return response.json();
+      })
       .then(data => {
         setOp(data);
         setLoading(false);
@@ -207,7 +214,14 @@ const App = () => {
           
           <button onClick={handleFileUpload}>Upload</button>
         </div>
-        {op.length > 0 ? (
+
+        {hasError && (
+          <div>
+            {alert("Error: Something went wrong. Please try again")}
+          </div>
+        )}
+
+        {op.length > 0 && !hasError ? (
           <div>
             {loading ? 
                   <div className="loader-container">
@@ -219,7 +233,7 @@ const App = () => {
 
               <div className='charts'> 
             
-                {op.map((currentValue, index) => (
+                {!hasError && op.map((currentValue, index) => (
                   <div key={index}>
                     <Result props={currentValue} />
                   </div>

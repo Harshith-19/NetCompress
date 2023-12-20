@@ -348,6 +348,18 @@ select:focus {
     width: 60px;
     height: 60px;
   }
+  .copy {
+    display: inline-block;
+    background-color: aliceblue;
+    padding: 6px;
+    border-radius: 6px;
+    max-width: 100%;
+    font-size: 14px;
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+    word-wrap: break-word;
+    word-break: break-all;
+  }
 }
 
 
