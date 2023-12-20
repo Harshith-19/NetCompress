@@ -4,7 +4,7 @@ import os
 def evaluate_image(input_image_path, compression_method='DCT', quality=50):
     extension = input_image_path.split('.')[-1]
     script_directory = os.path.dirname(__file__)
-    output_path = os.path.join(script_directory, 'compressed.'+extension)
+    output_path = os.path.join(script_directory, compression_method+'compressed.'+extension)
     try:
         img = Image.open(input_image_path)
 
@@ -20,7 +20,7 @@ def evaluate_image(input_image_path, compression_method='DCT', quality=50):
     except FileNotFoundError:
         print("The input image file was not found.")
 
-    reconstructed_path = os.path.join(script_directory, 'reconstructed.'+extension)
+    reconstructed_path = os.path.join(script_directory, compression_method+'reconstructed.'+extension)
 
     try:
         img = Image.open(output_path)
