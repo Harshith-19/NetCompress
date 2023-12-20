@@ -233,6 +233,51 @@ select:focus {
   margin-bottom: 20px;
   box-sizing: border-box;
 }
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 8px 0 0 0; 
+  }
+
+  .navbar-brand {
+    font-size: 1.3rem; 
+  }
+h1{
+  font-size: 30px;
+}
+
+  input[type='text'],
+  select {
+    width: calc(100% - 40px); 
+    margin-right: 0;
+    margin-bottom: 10px;
+    font-size: 0.9rem; 
+  }
+
+  button {
+    padding: 10px 20px; 
+    font-size: 0.9rem; 
+  }
+
+  .analysis-result h2,
+  .footer {
+    font-size: 0.9rem; 
+  }
+
+  .res-head {
+    font-size: 16px; 
+  }
+
+  .copy {
+    font-size: 12px; 
+  }
+  .loader {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+
 }
 .path-title{
   display: flex;

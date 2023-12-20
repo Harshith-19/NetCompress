@@ -43,6 +43,7 @@ const App = () => {
     },
    
   ];
+  const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [op, setOp] = useState([]);
   const [filePath, setFilePath] = useState('');
@@ -103,17 +104,6 @@ const App = () => {
       },
     ],
   });
-  // useEffect(() => {
-  //   setRatioGraph((prevFileData) => ({
-  //     ...prevFileData,
-  //     datasets: [
-  //       {
-  //         ...prevFileData.datasets[0],
-  //         data: [compression_ratio, loss_percentage],
-  //       },
-  //     ],
-  //   }));
-  // }, [compression_ratio, loss_percentage]);
 
   const [lossGraph, setLossGraph] = useState({
     labels: algos,
@@ -129,17 +119,6 @@ const App = () => {
       },
     ],
   });
-  // useEffect(() => {
-  //   setRatioGraph((prevFileData) => ({
-  //     ...prevFileData,
-  //     datasets: [
-  //       {
-  //         ...prevFileData.datasets[0],
-  //         data: [compression_ratio, loss_percentage],
-  //       },
-  //     ],
-  //   }));
-  // }, [compression_ratio, loss_percentage]);
 
   const getFileTypeFromExtension = (extension) => {
     const extensionMap = {
@@ -158,67 +137,6 @@ const App = () => {
     const fileType = extensionMap[extension.toLowerCase()];
     return fileType || 'Others';
   };
-  // const [formData, setFormData] = useState({
-  //   file_path: '',
-  //   file_type: '',
-  // });
-  // useEffect(() => {
-  //   setFormData({
-  //     file_path: filePath,
-  //     file_type: fileType,
-  //   });
-  // }, [filePath, fileType]);  
-  const handleCompressedFilePathChange = (e) => {
-    setCompressedFilePath(e.target.value);
-  };
-
-  const handleReconstructedFilePathChange = (e) => {
-    setReconstructedFilePath(e.target.value);
-  };
-
-  // const handleFileUpload = () => {
-
-  //   const dummyApiResponse = {
-  //     savedData: 500,
-  //     lostData: 200,
-  //   };
-  //   const fileExtension = filePath.split('.').pop();
-  //   const detectedFileType = getFileTypeFromExtension(fileExtension);
-  //   setFileType(detectedFileType);
-  //   setSavedData(dummyApiResponse.savedData);
-  //   setLostData(dummyApiResponse.lostData);
-
-  //   const formData = {
-  //     "file_path":filePath,
-  //     "file_type":fileType,
-  //   };
-  //   console.log('Data being sent to backend:', formData);
-
-  //   fetch('http://127.0.0.1:8000/upload/', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(formData),
-  //   })
-  //     .then(response => response.json()) 
-  //     .then(data => {
-  //       setOp(data); 
-  //     })
-  //     .catch(error => {
-
-  //       console.error('Error:', error);
-  //     });
-  // };
-
-  const handleFilePathChange = (e) => {
-    setFilePath(e.target.value);
-  };
-
-  const handleFileTypeChange = (e) => {
-    setFileType(e.target.value);
-  };
-
 
   const [formData, setFormData] = useState({
     "filePath": '',
@@ -233,32 +151,22 @@ const App = () => {
   
   useEffect(() => {
     setFormData({
-      "filePath": filePath,
+      "file": file,
       "fileType": fileType,
     });
-  }, [filePath, fileType]);
+  }, [file, fileType]);
   
   const handleFileUpload = () => {
     setLoading(true);
-    const dummyApiResponse = {
-      savedData: 500,
-      lostData: 200,
-    };
-    setSavedData(dummyApiResponse.savedData);
-    setLostData(dummyApiResponse.lostData);
-  
-    console.log('Data being sent to backend:', formData);
-  
+    console.log('File being sent to backend:', formData);
+
     fetch('http://127.0.0.1:8000/upload/', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
+      body: formData,
     })
-      .then(response => response.json()) 
+      .then(response => response.json())
       .then(data => {
-        setOp(data); 
+        setOp(data);
         setLoading(false);
       })
       .catch(error => {
@@ -266,6 +174,15 @@ const App = () => {
         setLoading(false);
       });
   };
+  
+  const handleFileChange = e => {
+    const uploadedFile = e.target.files[0];
+    setFile(uploadedFile);
+    const extension = uploadedFile.name.split('.').pop();
+    const detectedFileType = getFileTypeFromExtension(extension);
+    setFileType(detectedFileType);
+  };
+
 
   return (
     <div className="app">
@@ -275,11 +192,12 @@ const App = () => {
       <div className="container">
         <h1>File Upload and Analysis</h1>
         <div className="file-upload">
+          
           <input
-            type="text"
-            placeholder="Enter file path..."
-            value={filePath}
-            onChange={handleFilePathChange}
+           type="file" onChange={handleFileChange}
+            placeholder="Please upload file"
+            // value={filePath}
+            // onChange={handleFilePathChange}
             
           />
           
