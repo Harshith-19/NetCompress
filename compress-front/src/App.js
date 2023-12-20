@@ -158,11 +158,15 @@ const App = () => {
   
   const handleFileUpload = () => {
     setLoading(true);
-    console.log('File being sent to backend:', formData);
 
+    const formData2 = new FormData();
+    formData2.append('file', file); 
+    formData2.append('fileType', fileType);
+
+    console.log('File being sent to backend:', formData2);
     fetch('http://127.0.0.1:8000/upload/', {
       method: 'POST',
-      body: formData,
+      body: formData2,
     })
       .then(response => response.json())
       .then(data => {
@@ -203,7 +207,7 @@ const App = () => {
           
           <button onClick={handleFileUpload}>Upload</button>
         </div>
-        {savedData > 0 || lostData > 0 ? (
+        {op.length > 0 ? (
           <div>
             {loading ? 
                   <div className="loader-container">

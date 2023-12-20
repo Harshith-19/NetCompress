@@ -69,6 +69,9 @@ input[type='text']:focus {
   width: 100%;
 }
 .analysis-result {
+  max-width: 500px;
+  overflow-wrap: break-word; 
+  word-wrap: break-word; 
   background-color: #fefeff;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   padding: 30px;
@@ -202,9 +205,63 @@ select:focus {
   margin-right: 5px;
   border-radius: 50%;
 }
-
-
 @media (max-width: 768px) {
+  /* Adjustments for smaller screens */
+  .navbar {
+    padding: 8px 0 0 0;
+  }
+  .navbar-brand {
+    font-size: 1.3rem;
+  }
+  h1 {
+    font-size: 30px;
+  }
+  .pieContainer {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+  .graphs {
+    display: flex;
+    flex-direction: column;
+  }
+  input[type='text'],
+  select {
+    width: calc(100% - 40px);
+    margin-right: 0;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+  .analysis-result h2,
+  .footer {
+    font-size: 0.9rem;
+  }
+  .res-head {
+    font-size: 16px;
+  }
+  .copy {
+    font-size: 12px;
+  }
+  .loader {
+    width: 60px;
+    height: 60px;
+  }
+  /* Additional adjustments based on your layout */
+  .PieChart {
+    width: 80%;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+  }
+}
+/* 
+@media (max-width: 768px) {
+  .PieChart {
+    width: 80%; 
+  }
   .navbar {
     flex-direction: column;
     align-items: center;
@@ -224,28 +281,24 @@ select:focus {
     padding: 0 20px;
     flex:1;
   }
-  
-.PieChart {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  width: 80%;
-  margin-bottom: 20px;
-  box-sizing: border-box;
-}
-
-@media (max-width: 768px) {
   .navbar {
     padding: 8px 0 0 0; 
   }
-
   .navbar-brand {
     font-size: 1.3rem; 
   }
 h1{
   font-size: 30px;
 }
-
+  .pieContainer{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+  .graphs{
+    display: flex;
+    flex-direction: column;
+  }
   input[type='text'],
   select {
     width: calc(100% - 40px); 
@@ -275,10 +328,10 @@ h1{
     width: 60px;
     height: 60px;
   }
-}
+} */
 
 
-}
+
 .path-title{
   display: flex;
   justify-content: center;
