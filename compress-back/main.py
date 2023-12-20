@@ -1,6 +1,5 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
-from models import FileRequest
 from Compression.audio import main_audio
 from Compression.data import main_data
 from Compression.image import main_image
@@ -8,6 +7,9 @@ from Compression.mixed import main_mixed
 from Compression.real import main_real
 from Compression.text import main_text
 from Compression.video import main_video
+import shutil
+import os
+
 
 app = FastAPI()
 
@@ -18,10 +20,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.options("/upload/")
-async def options_upload():
-    return {"message": "Allowed"}
 
 @app.get("/")
 def read_root():
