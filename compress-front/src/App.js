@@ -132,7 +132,7 @@ const App = () => {
       wav: 'Audio',
       mp4: 'Video',
       mov: 'Video',
-      
+      pdf: 'Text'
     };
   
     const fileType = extensionMap[extension.toLowerCase()];
@@ -177,6 +177,7 @@ const App = () => {
         return response.json();
       })
       .then(data => {
+      console.log(data);
         setOp(data);
         setLoading(false);
       })
@@ -201,7 +202,7 @@ const App = () => {
         <div className="navbar-brand">NetCompress</div>
       </nav>
       <div className="container">
-        <h1>File Upload and Analysis</h1>
+        <h1>Data Compression Analysis</h1>
         <div className="file-upload">
           
           <input

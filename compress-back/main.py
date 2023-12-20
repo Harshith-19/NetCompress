@@ -43,10 +43,11 @@ def remove_uploaded_file(file_path: str):
         os.remove(file_path)
 
 @app.post("/upload/")
+
 async def upload_file(file: UploadFile = File(...), fileType: str = Form(...)):
     try:
         file_path = await save_upload_file(file)
-        result = {}
+        result = []
 
         if fileType == "Text":
             result = main_text(file_path)
@@ -63,12 +64,28 @@ async def upload_file(file: UploadFile = File(...), fileType: str = Form(...)):
         elif fileType == "Data dump":
             result = main_data(file_path)
         else:
-            result = {"message": "Type not found"}
- 
+            result = [{"message": "Type not found"}]
+
+        # Extract compression ratio and paths from the result
+        compression_ratios = [algo.get("compression_ratio", 0) for algo in result]
+        max_compression_ratio = max(compression_ratios, default=0)
+
+        # Remove files with compression ratio less than max
+        for algo in result:
+            if algo.get("compression_ratio", 0) < max_compression_ratio:
+                compressed_path = algo.get("compressed_file_path", "")
+                reconstructed_path = algo.get("reconstructed_file_path", "")
+                if compressed_path and os.path.exists(compressed_path):
+                    os.remove(compressed_path)
+                if reconstructed_path and os.path.exists(reconstructed_path):
+                    os.remove(reconstructed_path)
+
         return result
-        
+
     finally:
         remove_uploaded_file(file_path)
+
+
         
 
 if __name__ == "__main__":
