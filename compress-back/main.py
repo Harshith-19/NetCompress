@@ -21,6 +21,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.options("/upload/")
+async def options_upload():
+    return {"message": "Allowed"}
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
