@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from models import FileRequest
 from Compression.audio import main_audio
 from Compression.data import main_data
@@ -10,10 +11,17 @@ from Compression.video import main_video
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+@app.options("/upload/")
+async def options_upload():
+    return {"message": "Allowed"}
 
 @app.post("/upload/")
 def upload_file(file_request: FileRequest):
@@ -41,8 +49,7 @@ def upload_file(file_request: FileRequest):
     elif file_type == "Data dump":
         return main_data(file_path)
     
-    return {"message" : "type not found"}
-
+    return {"message" : "Type not found"}
 
 if __name__ == "__main__":
     import uvicorn
