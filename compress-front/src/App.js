@@ -227,7 +227,7 @@ const App = () => {
                 
               </div>
                   <div className='graph-bg'>
-                    <div className='res-head'><p><strong>Compression and Loss for each Algorithm</strong></p></div>
+                    <div className='res-head'>Compression and Loss for each Algorithm</div>
                     <div className='graphs'>
                           <div className='pieContainer'>
                             <div className='PieChart'>
